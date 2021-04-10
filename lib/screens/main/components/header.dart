@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
+import 'package:news/controllers/MenuControllers.dart';
 import 'package:news/screens/main/components/socal.dart';
 import 'package:news/screens/main/components/web_menu.dart';
 
 import '../../../constants.dart';
-
+import '../../../responsive.dart';
 
 class Header extends StatelessWidget {
-  const Header({
-    Key key,
-  }) : super(key: key);
+  final MenuController _controller = Get.put(MenuController());
 
   @override
   Widget build(BuildContext context) {
@@ -26,9 +26,16 @@ class Header extends StatelessWidget {
               children: [
                 Row(
                   children: [
+                    if (!Responsive.isDesktop(context))
+                      IconButton(
+                        icon: Icon(Icons.menu, color: Colors.white),
+                        onPressed: () {
+                          _controller.openOrCloseDrawer();
+                        },
+                      ),
                     SvgPicture.asset('assets/icons/logo.svg'),
                     Spacer(),
-                    WebMenu(),
+                    if (Responsive.isDesktop(context)) WebMenu(),
                     Spacer(),
                     Socal(),
                   ],
@@ -51,20 +58,22 @@ class Header extends StatelessWidget {
                     )),
                 FittedBox(
                   child: TextButton(
-                    onPressed: () {},
-                    child: Row(
-                      children: [
-                        Text(
-                          "Learn more",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, color: Colors.white),
-                        ),
-                        SizedBox(width: kDefaultPadding / 2),
-                        Icon(Icons.arrow_forward, color: Colors.white)  
-                      ],
-                    )),
+                      onPressed: () {},
+                      child: Row(
+                        children: [
+                          Text(
+                            "Learn more",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white),
+                          ),
+                          SizedBox(width: kDefaultPadding / 2),
+                          Icon(Icons.arrow_forward, color: Colors.white)
+                        ],
+                      )),
                 ),
-                SizedBox(height: kDefaultPadding)
+                if (Responsive.isDesktop(context))
+                  SizedBox(height: kDefaultPadding)
               ],
             ),
           )
